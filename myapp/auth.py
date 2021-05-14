@@ -9,6 +9,7 @@ from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 from myapp.models import User, Role
 from myapp import db
+from flask_login import login_user, logout_user, current_user, login_required
 
 
 auth = Blueprint('auth', __name__)
@@ -21,19 +22,29 @@ def signin():
         password = request.form.get('password')
 
         user = User.query.filter_by(user_id=id).first()
+        role = user.user_role
 
         if not user or password != user.password:
             flash('Wrong credentials')
         else:
-            role = user.user_role
+            #Remeber the user
+            login_user(user, remember=True)
+            
             if role == 'adm':
-                #return "Admin Dashboard"
+                #return "Admin Dashboard " + user.user_name
                 return redirect(url_for('admin.dashboard', name=user.user_name))
             if role == 'tch':
-                #return "Admin Dashboard"
-                return "Teacher Dashboard"
+                return "Teacher Dashboard " + user.user_name
+                #return "Teacher Dashboard"
             if role == 'std':
-                #return "Admin Dashboard"
-                return "Student Dashboard"
+                return "Student Dashboard " + user.user_name
+                #return "Student Dashboard"
 
     return render_template('sign-in.html')
+
+
+@auth.route('/signout')
+@login_required
+def signout():
+    logout_user()
+    return redirect(url_for('auth.signin'))

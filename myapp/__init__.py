@@ -1,6 +1,8 @@
 from flask import Flask
+from flask_login.utils import login_fresh
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_login import LoginManager, login_manager
 
 
 db = SQLAlchemy()
@@ -17,12 +19,20 @@ def create_app():
 
     #Import models
     from myapp.models import User, Role
-    
+
     #Import blueprint
     from myapp.auth import auth
     app.register_blueprint(auth, url_prefix='/')
 
     from myapp.admin import admin
     app.register_blueprint(admin, url_prefix='/')
+
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.signin'
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
 
     return app
