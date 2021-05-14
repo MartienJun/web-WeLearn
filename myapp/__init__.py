@@ -22,4 +22,7 @@ def create_app():
     from myapp.auth import auth
     app.register_blueprint(auth, url_prefix='/')
 
+    from myapp.admin import admin
+    app.register_blueprint(admin, url_prefix='/')
+
     return app
