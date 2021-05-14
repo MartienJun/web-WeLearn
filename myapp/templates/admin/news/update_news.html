@@ -1,0 +1,58 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Dashboard Admin{% endblock title %}
+
+{% block nav_news_active %}active{% endblock nav_news_active %}
+
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endfor %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 align-self-center">
+            <div class="p-5">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 font-weight-bold text-gray-800">Update News</h1>
+                </div>
+                <form class="user" method="post">
+                    <div class="form-group">
+                        <label for="">News Title</label>
+                        <input class="form-control" name="title" id="title" value="{{ news.news_title }}" type="text">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Message</label>
+                        <textarea class="form-control" name="message" id="message" style="height: 250px">{{ news.news_message }}</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input class="" type="file" id="file" name="file">
+                        <!-- <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>     -->
+                    </div>
+
+                    <!-- <script>
+                        $(".custom-file-input").on("change", function() {
+                            var fileName = $(this).val().split("\\").pop();
+                            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                        });
+                    </script> -->
+
+                    <button type="submit" value="create news" class="btn btn-dark btn-user btn-block">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
