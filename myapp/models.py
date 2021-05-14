@@ -18,3 +18,12 @@ class Role(db.Model):
 
     def __repr__(self) -> str:
         return  '<Role %s>' % self.role_name
+
+class News(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    news_title = db.Column(db.String(255), nullable=False)
+    news_message = db.Column(db.String(255), nullable=False)
+    news_file = db.Column(db.String(255), nullable=True)
+
+    def __repr__(self) -> str:
+        return  '<Role %s>' % self.news_title

@@ -31,14 +31,11 @@ def signin():
             login_user(user, remember=True)
             
             if role == 'adm':
-                #return "Admin Dashboard " + user.user_name
-                return redirect(url_for('admin.dashboard', name=user.user_name))
-            if role == 'tch':
-                return "Teacher Dashboard " + user.user_name
-                #return "Teacher Dashboard"
-            if role == 'std':
-                return "Student Dashboard " + user.user_name
-                #return "Student Dashboard"
+                return redirect(url_for('admin.dashboard', user=current_user))
+            elif role == 'tch':
+                return "Teacher Dashboard "
+            else:
+                return "Student Dashboard "
 
     return render_template('sign-in.html')
 
