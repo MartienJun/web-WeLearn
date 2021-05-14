@@ -2,7 +2,8 @@ from myapp import db
 from flask_login import UserMixin
 
 class User(db.Model, UserMixin):
-    user_id = db.Column(db.String(7), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(7), nullable=False)
     user_name = db.Column(db.String(255), nullable=False)
     user_role = db.Column(db.String(7), db.ForeignKey('role.role_id', onupdate='CASCADE', ondelete='NO ACTION'), nullable=False)
     password = db.Column(db.String(255), nullable=False)
