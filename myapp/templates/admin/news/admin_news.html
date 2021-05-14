@@ -31,8 +31,8 @@
                             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                 aria-labelledby="dropdownMenuLink">
                                 <div class="dropdown-header">Option:</div>
-                                <a class="dropdown-item" href="#">Update</a>
-                                <a class="dropdown-item" href="#">Delete</a>
+                                <a class="dropdown-item" href="{{ url_for('admin.update_news', id=news['id']) }}">Update</a>
+                                <a class="dropdown-item" href="{{ url_for('admin.delete_news', id=news['id']) }}">Delete</a>
                             </div>
                         </div>
                     </div>
