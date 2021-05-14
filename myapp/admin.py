@@ -61,7 +61,7 @@ def update_news(id):
         news.news_file = file
         db.session.commit()
         return redirect(url_for('admin.view_news'))
-    return render_template('admin/news/update_news.html', user=current_user)
+    return render_template('admin/news/update_news.html', user=current_user, news=News.query.filter_by(id=id).first())
 
 @admin.route('/<int:id>/admin/news/delete', methods=['GET', 'POST'])
 @login_required
