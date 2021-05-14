@@ -7,9 +7,10 @@ from flask import session
 from flask import url_for
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from myapp.models import User, Role
+from myapp.models import User, Role, News
 from myapp import db
 from flask_login import current_user, login_required
+from sqlalchemy import insert, update, delete
 
 
 admin = Blueprint('admin', __name__)
@@ -23,25 +24,47 @@ def dashboard():
 #---------------------------------------------------------
 
 @admin.route('/admin/news')
+@login_required
 def view_news():
-    return render_template('admin/admin_news.html')
+    news = News.query.all()
+    return render_template('admin/news/admin_news.html', user=current_user, news=news)
+
+@admin.route('/admin/news/create', methods=['GET', 'POST'])
+@login_required
+def create_news():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        message = request.form.get('message')
+        file = request.form.get('file')
+
+        if not title or not message:
+            flash('Field canot be empty')
+        else:
+            new_news = News(news_title=title, news_message=message, news_file=file)
+            db.session.add(new_news)
+            db.session.commit()
+            return redirect(url_for('admin.view_news'))
+    return render_template('admin/news/create_news.html', user=current_user)
 
 #---------------------------------------------------------
 
 @admin.route('/admin/schedule')
+@login_required
 def view_schedule():
-    return render_template('admin/admin_schedule.html')
+    return render_template('admin/admin_schedule.html', user=current_user)
 
 #---------------------------------------------------------
 
 @admin.route('/admin/subject')
+@login_required
 def view_subject():
-    return render_template('admin/admin_subject.html')
+    return render_template('admin/admin_subject.html', user=current_user)
 
 #---------------------------------------------------------
 
 @admin.route('/admin/user')
+@login_required
 def view_user():
-    return render_template('admin/admin_user.html')
+    return render_template('admin/admin_user.html', user=current_user)
 
 #---------------------------------------------------------
