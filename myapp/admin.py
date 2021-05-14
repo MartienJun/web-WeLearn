@@ -1,3 +1,4 @@
+import re
 from flask import Blueprint
 from flask import render_template
 from flask import flash
@@ -45,6 +46,30 @@ def create_news():
             db.session.commit()
             return redirect(url_for('admin.view_news'))
     return render_template('admin/news/create_news.html', user=current_user)
+
+@admin.route('/<int:id>/admin/news/update', methods=['GET', 'POST'])
+@login_required
+def update_news(id):
+    if request.method == 'POST':
+        title = request.form.get('title')
+        message = request.form.get('message')
+        file = request.form.get('file')
+
+        news = News.query.filter_by(id=id).first()
+        news.news_title = title
+        news.news_message = message
+        news.news_file = file
+        db.session.commit()
+        return redirect(url_for('admin.view_news'))
+    return render_template('admin/news/update_news.html', user=current_user)
+
+@admin.route('/<int:id>/admin/news/delete', methods=['GET', 'POST'])
+@login_required
+def delete_news(id):
+    news = News.query.filter_by(id=id).first()
+    db.session.delete(news)
+    db.session.commit()
+    return redirect(url_for('admin.view_news'))
 
 #---------------------------------------------------------
 
