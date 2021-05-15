@@ -24,7 +24,7 @@ def signin():
             login_user(user, remember=True)
             
             if role == 'adm':
-                return redirect(url_for('admin.dashboard', user=current_user))
+                return redirect(url_for('admin.dashboard', this_user=current_user))
             elif role == 'tch':
                 return "Teacher Dashboard "
             else:

@@ -113,7 +113,7 @@
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    {% if user.is_authenticated %}
+                                    {% if this_user.is_authenticated %}
                                         {{ current_user.user_name }}
                                     {% else %}
                                         User

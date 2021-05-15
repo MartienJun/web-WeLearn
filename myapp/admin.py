@@ -21,7 +21,8 @@ def dashboard():
 @login_required
 def view_news():
     news = News.query.all()
-    return render_template('admin/news/admin_news.html', user=current_user, news=news)
+    return render_template('admin/news/admin_news.html', this_user=current_user, news=news)
+
 
 @admin.route('/admin/news/create', methods=['GET', 'POST'])
 @login_required
@@ -42,7 +43,7 @@ def create_news():
                 files.save(file)
 
             return redirect(url_for('admin.view_news'))
-    return render_template('admin/news/create_news.html', user=current_user)
+    return render_template('admin/news/create_news.html', this_user=current_user)
 
 
 @admin.route('/<int:id>/admin/news/update', methods=['GET', 'POST'])
@@ -66,7 +67,7 @@ def update_news(id):
                 files.save(file)
 
             return redirect(url_for('admin.view_news'))
-    return render_template('admin/news/update_news.html', user=current_user, news=News.query.filter_by(id=id).first())
+    return render_template('admin/news/update_news.html', this_user=current_user, news=News.query.filter_by(id=id).first())
 
 
 @admin.route('/<int:id>/admin/news/delete', methods=['GET', 'POST'])
@@ -96,14 +97,14 @@ def delete_news(id):
 @admin.route('/admin/schedule')
 @login_required
 def view_schedule():
-    return render_template('admin/admin_schedule.html', user=current_user)
+    return render_template('admin/admin_schedule.html', this_user=current_user)
 
 #---------------------------------------------------------
 
 @admin.route('/admin/subject')
 @login_required
 def view_subject():
-    return render_template('admin/admin_subject.html', user=current_user)
+    return render_template('admin/admin_subject.html', this_user=current_user)
 
 #---------------------------------------------------------
 
@@ -111,7 +112,7 @@ def view_subject():
 @login_required
 def view_user():
     users = User.query.all()
-    return render_template('admin/user/admin_user.html', user=current_user, users=users)
+    return render_template('admin/user/admin_user.html', this_user=current_user, users=users)
 
 @admin.route('/admin/user/create', methods=['GET', 'POST'])
 @login_required
@@ -130,7 +131,7 @@ def create_user():
             db.session.commit()
 
             return redirect(url_for('admin.view_user'))
-    return render_template('admin/user/create_user.html', user=current_user)
+    return render_template('admin/user/create_user.html', this_user=current_user)
 
 
 @admin.route('/<int:id>/admin/user/update', methods=['GET', 'POST'])
@@ -153,6 +154,15 @@ def update_user(id):
             db.session.commit()
 
             return redirect(url_for('admin.view_user'))
-    return render_template('admin/user/update_user.html', user=current_user, users=User.query.filter_by(id=id).first())
+    return render_template('admin/user/update_user.html', this_user=current_user, user=User.query.filter_by(id=id).first())
+
+
+@admin.route('/<int:id>/admin/user/delete', methods=['GET', 'POST'])
+@login_required
+def delete_user(id):
+    user = User.query.filter_by(id=id).first()
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('admin.view_user'))
 
 #---------------------------------------------------------
