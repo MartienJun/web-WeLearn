@@ -21,7 +21,7 @@
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 font-weight-bold text-gray-800">Add News</h1>
                 </div>
-                <form class="user" method="post">
+                <form class="user" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="">News Title</label>
                         <input class="form-control" name="title" id="title" type="text" >
@@ -34,18 +34,7 @@
                     
                     <div class="form-group">
                         <input class="" type="file" id="file" name="file">
-                        <!-- <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="customFile">
-                            <label class="custom-file-label" for="customFile">Choose file</label>
-                        </div>     -->
                     </div>
-
-                    <!-- <script>
-                        $(".custom-file-input").on("change", function() {
-                            var fileName = $(this).val().split("\\").pop();
-                            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                        });
-                    </script> -->
 
                     <button type="submit" value="create news" class="btn btn-dark btn-user btn-block">
                         Submit
