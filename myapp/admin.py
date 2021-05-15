@@ -27,12 +27,12 @@ def create_news():
     if request.method == 'POST':
         title = request.form.get('title')
         message = request.form.get('message')
-        file = request.form.get('file')
+        file = request.files['file']
 
         if not title or not message:
             flash('Field canot be empty')
         else:
-            new_news = News(news_title=title, news_message=message, news_file=file)
+            new_news = News(news_title=title, news_message=message, news_file=file.filename)
             db.session.add(new_news)
             db.session.commit()
             return redirect(url_for('admin.view_news'))
@@ -44,12 +44,12 @@ def update_news(id):
     if request.method == 'POST':
         title = request.form.get('title')
         message = request.form.get('message')
-        file = request.form.get('file')
+        file = request.files['file']
 
         news = News.query.filter_by(id=id).first()
         news.news_title = title
         news.news_message = message
-        news.news_file = file
+        news.news_file = file.filename
         db.session.commit()
         return redirect(url_for('admin.view_news'))
     return render_template('admin/news/update_news.html', user=current_user, news=News.query.filter_by(id=id).first())
