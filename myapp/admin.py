@@ -129,6 +129,27 @@ def create_subject():
     return render_template('admin/subject/create_subject.html', this_user=current_user, users=users)
 
 
+@admin.route('/<int:id>/admin/subject/update', methods=['GET', 'POST'])
+@login_required
+def update_subject(id):
+    users = User.query.filter_by(user_role='tch').all()
+
+    if request.method == 'POST':
+        subject_id = request.form.get('s_id')
+        subject_name = request.form.get('s_name')
+        subject_teacher = request.form.get('s_teacher')
+
+        if not subject_id or not subject_name or not subject_teacher:
+            flash('Field canot be empty')
+        else:
+            subject = Subject.query.filter_by(id=id).first()
+            subject.subject_id = subject_id
+            subject.subject_name = subject_name
+            subject.subject_teacher = subject_teacher
+            db.session.commit()
+
+            return redirect(url_for('admin.view_subject'))
+    return render_template('admin/subject/update_subject.html', this_user=current_user, users=users, subject=Subject.query.filter_by(id=id).first())
 #---------------------------------------------------------
 
 @admin.route('/admin/user')
