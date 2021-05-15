@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from myapp.models import User, Role, News
+from myapp.models import User, Role, News, Subject
 from myapp import db, files
 from flask_login import current_user, login_required
 
@@ -104,7 +104,30 @@ def view_schedule():
 @admin.route('/admin/subject')
 @login_required
 def view_subject():
-    return render_template('admin/admin_subject.html', this_user=current_user)
+    subjects = Subject.query.all()
+    return render_template('admin/subject/admin_subject.html', this_user=current_user, subjects=subjects)
+
+
+@admin.route('/admin/subject/create', methods=['GET', 'POST'])
+@login_required
+def create_subject():
+    users = User.query.filter_by(user_role='tch').all()
+
+    if request.method == 'POST':
+        subject_id = request.form.get('s_id')
+        subject_name = request.form.get('s_name')
+        subject_teacher = request.form.get('s_teacher')
+        
+        if not subject_id or not subject_name or not subject_teacher:
+            flash('Field canot be empty')
+        else:
+            new_subject = Subject(subject_id=subject_id, subject_name=subject_name, subject_teacher=subject_teacher)
+            db.session.add(new_subject)
+            db.session.commit()
+
+            return redirect(url_for('admin.view_subject'))
+    return render_template('admin/subject/create_subject.html', this_user=current_user, users=users)
+
 
 #---------------------------------------------------------
 
@@ -113,6 +136,7 @@ def view_subject():
 def view_user():
     users = User.query.all()
     return render_template('admin/user/admin_user.html', this_user=current_user, users=users)
+
 
 @admin.route('/admin/user/create', methods=['GET', 'POST'])
 @login_required
