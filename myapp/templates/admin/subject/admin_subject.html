@@ -70,7 +70,7 @@
                                             <div class="modal-footer">
                                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                                                 <form method="post">
-                                                    <a class="btn btn-danger" type="submit" href="">Delete</a>
+                                                    <a class="btn btn-danger" type="submit" href="{{ url_for('admin.delete_subject', id=subject.id) }}">Delete</a>
                                                 </form>
                                             </div>
                                         </div>
