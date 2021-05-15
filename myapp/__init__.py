@@ -1,10 +1,13 @@
+import os
 from flask import Flask
 from flask_login.utils import login_fresh
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_manager
+from flask_uploads import UploadSet, configure_uploads, IMAGES
+from flask_uploads.extensions import DOCUMENTS, IMAGES
 
-
+files = UploadSet('files', IMAGES + DOCUMENTS)
 db = SQLAlchemy()
 DB_NAME = 'welearn.db'
 
@@ -12,6 +15,14 @@ DB_NAME = 'welearn.db'
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'welearn welearn welearn'
+    
+    #Upload folder config
+    app.config['UPLOADED_FILES_DEST'] = os.path.realpath('.') + '/uploads'
+    #app.config['UPLOADED_FILES_ALLOW'] = ["JPEG", "JPG", "PNG", "PDF"]
+    app.config['MAX_CONTENT_LENGTH'] = 10 * 1000 * 1000 #Max file size 10MB
+    configure_uploads(app, files)
+
+    #Database config
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)

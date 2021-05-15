@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 from myapp.models import User, Role, News
-from myapp import db
+from myapp import db, files
 from flask_login import current_user, login_required
 
 
@@ -35,6 +36,11 @@ def create_news():
             new_news = News(news_title=title, news_message=message, news_file=file.filename)
             db.session.add(new_news)
             db.session.commit()
+            
+            if file.filename != "":
+                # filename = secure_filename(file.filename)
+                files.save(file)
+
             return redirect(url_for('admin.view_news'))
     return render_template('admin/news/create_news.html', user=current_user)
 
