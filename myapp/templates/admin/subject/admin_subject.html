@@ -1,0 +1,89 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Dashboard Admin{% endblock title %}
+
+{% block nav_subject_active %}active{% endblock nav_subject_active %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Content Row -->
+    <div class="row mb-5">
+        <div class="col-xl-12 col-md-12 mb-12">
+            <a class="btn btn-dark btn-icon-split mr-4" href="{{ url_for('admin.create_user') }}">
+                <span class="icon text-white-50"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                <span class="text">Add New Subject</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-dark">Subject List</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered post" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="text-dark">
+                        <tr>
+                            <th class="text-center">ID</th>
+                            <th class="text-center">Subject ID</th>
+                            <th class="text-center">Subject Name</th>
+                            <th class="text-center">Teacher Name</th>
+                            <th class="text-center"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for subject in subjects %}
+                        <tr>
+                            <td class="text-center">{{ subject.id }}</td>
+                            <td class="text-center">{{ subject.subject_id }}</td>
+                            <td class="text-center">{{ subject.subject_name }}</td>
+                            <td class="text-center">{{ subject.teacher_name }}</td>
+                            <td class="d-flex justify-content-center">
+                                <a class="btn btn-warning btn-icon-split mx-2" href="{{ url_for('admin.update_user', id=user.id) }}">
+                                    <span class="text">
+                                        <i class="fa fa-wrench" aria-hidden="true"></i>
+                                    </span>
+                                </a>
+
+                                <a class="btn btn-danger btn-icon-split mx-2" data-toggle="modal" data-target="#deleteUserModal{{ user.id }}">
+                                    <span class="icon text">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </span>
+                                </a>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteUserModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                                    <div class="modal-dialog  modal-dialog-centered" role="document" me>
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="">Delete this user?</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <p>This user will be removed from database.</p>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                                <form method="post">
+                                                    <a class="btn btn-danger" type="submit" href="{{ url_for('admin.delete_user', id=user.id) }}">Delete</a>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Delete Modal -->
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
