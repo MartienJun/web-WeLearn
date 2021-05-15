@@ -150,6 +150,16 @@ def update_subject(id):
 
             return redirect(url_for('admin.view_subject'))
     return render_template('admin/subject/update_subject.html', this_user=current_user, users=users, subject=Subject.query.filter_by(id=id).first())
+
+
+@admin.route('/<int:id>/admin/subject/delete', methods=['GET', 'POST'])
+@login_required
+def delete_subject(id):
+    subject = Subject.query.filter_by(id=id).first()
+    db.session.delete(subject)
+    db.session.commit()
+    return redirect(url_for('admin.view_subject'))
+
 #---------------------------------------------------------
 
 @admin.route('/admin/user')
