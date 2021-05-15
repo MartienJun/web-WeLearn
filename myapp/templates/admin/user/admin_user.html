@@ -38,9 +38,9 @@
                             <td class="text-center">{{ user.id }}</td>
                             <td class="text-center">{{ user.user_id }}</td>
                             <td class="text-center">{{ user.user_name }}</td>
-                            {% if user.user_role == adm %}
+                            {% if user.user_role == 'adm' %}
                                 <td class="text-center">Admin</td>
-                            {% elif user['user_role'] == tch %}
+                            {% elif user['user_role'] == 'tch' %}
                                 <td class="text-center">Teacher</td>
                             {% else %}
                                 <td class="text-center">Student</td>
