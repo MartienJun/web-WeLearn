@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
@@ -38,7 +39,6 @@ def create_news():
             db.session.commit()
             
             if file.filename != "":
-                # filename = secure_filename(file.filename)
                 files.save(file)
 
             return redirect(url_for('admin.view_news'))
@@ -52,12 +52,19 @@ def update_news(id):
         message = request.form.get('message')
         file = request.files['file']
 
-        news = News.query.filter_by(id=id).first()
-        news.news_title = title
-        news.news_message = message
-        news.news_file = file.filename
-        db.session.commit()
-        return redirect(url_for('admin.view_news'))
+        if not title or not message:
+            flash('Field canot be empty')
+        else:
+            news = News.query.filter_by(id=id).first()
+            news.news_title = title
+            news.news_message = message
+            news.news_file = file.filename
+            db.session.commit()
+
+            if file.filename != "":
+                files.save(file)
+
+            return redirect(url_for('admin.view_news'))
     return render_template('admin/news/update_news.html', user=current_user, news=News.query.filter_by(id=id).first())
 
 @admin.route('/<int:id>/admin/news/delete', methods=['GET', 'POST'])
@@ -66,6 +73,20 @@ def delete_news(id):
     news = News.query.filter_by(id=id).first()
     db.session.delete(news)
     db.session.commit()
+
+    upload_file_path = os.path.join(os.path.join(os.path.realpath('.'), 'uploads'), news.news_file)
+    print(upload_file_path)
+
+    if os.path.exists(upload_file_path):
+        print('ada')
+    # if news.news_file != "":
+    #     upload_file_path = os.path.join(os.path.realpath('.'), 'uploads')
+    #     print(upload_file_path)
+    #     #os.remove(os.path.join(upload_file_path, news.news_file))
+    #     m = os.path.join(upload_file_path, news.news_file)
+    #     print(m)
+    #     os.system('rm ' + 'm')
+    
     return redirect(url_for('admin.view_news'))
 
 #---------------------------------------------------------
