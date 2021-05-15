@@ -46,7 +46,7 @@
                                 <td class="text-center">Student</td>
                             {% endif %}
                             <td class="d-flex justify-content-center">
-                                <a class="btn btn-warning btn-icon-split mx-2" href="">
+                                <a class="btn btn-warning btn-icon-split mx-2" href="{{ url_for('admin.update_user', id=user.id) }}">
                                     <span class="text">
                                         <i class="fa fa-wrench" aria-hidden="true"></i>
                                     </span>
