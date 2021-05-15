@@ -44,6 +44,7 @@ def create_news():
             return redirect(url_for('admin.view_news'))
     return render_template('admin/news/create_news.html', user=current_user)
 
+
 @admin.route('/<int:id>/admin/news/update', methods=['GET', 'POST'])
 @login_required
 def update_news(id):
@@ -66,6 +67,7 @@ def update_news(id):
 
             return redirect(url_for('admin.view_news'))
     return render_template('admin/news/update_news.html', user=current_user, news=News.query.filter_by(id=id).first())
+
 
 @admin.route('/<int:id>/admin/news/delete', methods=['GET', 'POST'])
 @login_required
@@ -129,5 +131,28 @@ def create_user():
 
             return redirect(url_for('admin.view_user'))
     return render_template('admin/user/create_user.html', user=current_user)
+
+
+@admin.route('/<int:id>/admin/user/update', methods=['GET', 'POST'])
+@login_required
+def update_user(id):
+    if request.method == 'POST':
+        user_id = request.form.get('u_id')
+        user_name = request.form.get('u_name')
+        user_role = request.form.get('u_role')
+        password = request.form.get('password')
+
+        if not user_id or not user_name or not user_role or not password:
+            flash('Field canot be empty')
+        else:
+            user = User.query.filter_by(id=id).first()
+            user.user_id = user_id
+            user.user_name = user_name
+            user.user_role = user_role
+            user.password = password
+            db.session.commit()
+
+            return redirect(url_for('admin.view_user'))
+    return render_template('admin/user/update_user.html', user=current_user, users=User.query.filter_by(id=id).first())
 
 #---------------------------------------------------------
