@@ -111,4 +111,23 @@ def view_user():
     users = User.query.all()
     return render_template('admin/user/admin_user.html', user=current_user, users=users)
 
+@admin.route('/admin/user/create', methods=['GET', 'POST'])
+@login_required
+def create_user():
+    if request.method == 'POST':
+        user_id = request.form.get('u_id')
+        user_name = request.form.get('u_name')
+        user_role = request.form.get('u_role')
+        password = request.form.get('password')
+
+        if not user_id or not user_name or not user_role or not password:
+            flash('Field canot be empty')
+        else:
+            new_user = User(user_id=user_id, user_name=user_name, user_role=user_role, password=password)
+            db.session.add(new_user)
+            db.session.commit()
+
+            return redirect(url_for('admin.view_user'))
+    return render_template('admin/user/create_user.html', user=current_user)
+
 #---------------------------------------------------------
