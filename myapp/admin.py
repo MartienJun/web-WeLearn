@@ -108,6 +108,7 @@ def view_subject():
 @admin.route('/admin/user')
 @login_required
 def view_user():
-    return render_template('admin/admin_user.html', user=current_user)
+    users = User.query.all()
+    return render_template('admin/user/admin_user.html', user=current_user, users=users)
 
 #---------------------------------------------------------
