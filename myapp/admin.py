@@ -1,17 +1,8 @@
-import re
-from flask import Blueprint
-from flask import render_template
-from flask import flash
-from flask import request
-from flask import redirect
-from flask import session
-from flask import url_for
-from werkzeug.security import check_password_hash
-from werkzeug.security import generate_password_hash
+from flask import Blueprint, render_template, flash, redirect, url_for, request
+from werkzeug.security import check_password_hash, generate_password_hash
 from myapp.models import User, Role, News
 from myapp import db
 from flask_login import current_user, login_required
-from sqlalchemy import insert, update, delete
 
 
 admin = Blueprint('admin', __name__)
