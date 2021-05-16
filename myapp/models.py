@@ -9,7 +9,7 @@ class User(db.Model, UserMixin):
     user_role = db.Column(db.String(7), db.ForeignKey('role.role_id', onupdate='CASCADE'), nullable=False)
     password = db.Column(db.String(255), nullable=False)
     subject = db.relationship('Subject', backref='teacher', lazy=True)
-    #profile = db.relationship('Profile', backref='user_id', lazy=True)
+    profile_employee = db.relationship('Profile_Employee', backref='employee', lazy=True)
 
     def __repr__(self) -> str:
         return '<User %s>' % self.user_name
@@ -45,8 +45,11 @@ class Subject(db.Model):
         return  '<Role %s>' % self.subject_name
 
 
-# class Profile(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.String(7), db.ForeignKey('user.user_id', onupdate='CASCADE', ondelete='CASCADE'), nullable=True)
-#     email = db.Column(db.String(255), unique=True, nullable=False)
-#     telp = db.Column(db.String(15), unique=True, nullable=False)
+class Profile_Employee(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.String(7), db.ForeignKey('user.user_id', onupdate='CASCADE', ondelete='CASCADE'), nullable=True)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    telp = db.Column(db.String(15), unique=True, nullable=False)
+
+    def __repr__(self) -> str:
+        return  '<Role %s>' % self.employee_id
