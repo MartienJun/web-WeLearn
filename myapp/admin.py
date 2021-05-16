@@ -1,8 +1,9 @@
 import os
+from re import A
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from myapp.models import User, News, Subject, Profile_Employee
+from myapp.models import Schedule, User, News, Subject, Profile_Employee, Class
 from myapp import db, files
 from flask_login import current_user, login_required
 
@@ -97,7 +98,68 @@ def delete_news(id):
 @admin.route('/admin/schedule')
 @login_required
 def view_schedule():
-    return render_template('admin/admin_schedule.html', this_user=current_user)
+    users = User.query.filter_by(user_role='tch').all()
+    schedules = Schedule.query.all()
+    all_class = Class.query.all()
+    subjects = Subject.query.all()
+    return render_template('admin/schedule/admin_schedule.html', this_user=current_user, subjects=subjects, schedules=schedules, all_class=all_class, users=users)
+
+
+@admin.route('/admin/schedule/create', methods=['GET', 'POST'])
+@login_required
+def create_schedule():
+    subjects = Subject.query.all()
+    all_class = Class.query.all()
+
+    if request.method == 'POST':
+        schedule_class = request.form.get('s_class')
+        schedule_day = request.form.get('s_day')
+        schedule_start = request.form.get('s_start')
+        schedule_end = request.form.get('s_end')
+        subject = request.form.get('s_subject')
+        
+        if not schedule_class or not schedule_day or not schedule_start or not schedule_end or not subject:
+            flash('Field canot be empty')
+        else:
+            new_schedule = Schedule(schedule_class=schedule_class, day=schedule_day, start_time=schedule_start, end_time=schedule_end, subject=subject)
+            db.session.add(new_schedule)
+            db.session.commit()
+
+            return redirect(url_for('admin.view_schedule'))
+    return render_template('admin/schedule/create_schedule.html', this_user=current_user, subjects=subjects, all_class=all_class)
+
+
+# @admin.route('/<int:id>/admin/subject/update', methods=['GET', 'POST'])
+# @login_required
+# def update_subject(id):
+#     if request.method == 'POST':
+#         subject_id = request.form.get('s_id')
+#         subject_name = request.form.get('s_name')
+#         subject_teacher = request.form.get('s_teacher')
+#         sks = request.form.get('sks')
+
+#         if not subject_id or not subject_name or not subject_teacher or not sks:
+#             flash('Field canot be empty')
+#         else:
+#             subject = Subject.query.filter_by(id=id).first()
+#             subject.subject_id = subject_id
+#             subject.subject_name = subject_name
+#             subject.subject_teacher = subject_teacher
+#             subject.sks = sks
+#             db.session.commit()
+
+#             return redirect(url_for('admin.view_subject'))
+#     return render_template('admin/subject/update_subject.html', this_user=current_user, users=users, subject=Subject.query.filter_by(id=id).first())
+
+
+
+# @admin.route('/<int:id>/admin/schedule/delete', methods=['GET', 'POST'])
+# @login_required
+# def delete_schedule(id):
+#     schedule = Schedule.query.filter_by(id=id).first()
+#     db.session.delete(schedule)
+#     db.session.commit()
+#     return redirect(url_for('admin.view_schedule'))
 
 #---------------------------------------------------------
 
@@ -118,11 +180,12 @@ def create_subject():
         subject_id = request.form.get('s_id')
         subject_name = request.form.get('s_name')
         subject_teacher = request.form.get('s_teacher')
+        sks = request.form.get('sks')
         
-        if not subject_id or not subject_name or not subject_teacher:
+        if not subject_id or not subject_name or not subject_teacher or not sks:
             flash('Field canot be empty')
         else:
-            new_subject = Subject(subject_id=subject_id, subject_name=subject_name, subject_teacher=subject_teacher)
+            new_subject = Subject(subject_id=subject_id, subject_name=subject_name, subject_teacher=subject_teacher, sks=sks)
             db.session.add(new_subject)
             db.session.commit()
 
@@ -139,14 +202,16 @@ def update_subject(id):
         subject_id = request.form.get('s_id')
         subject_name = request.form.get('s_name')
         subject_teacher = request.form.get('s_teacher')
+        sks = request.form.get('sks')
 
-        if not subject_id or not subject_name or not subject_teacher:
+        if not subject_id or not subject_name or not subject_teacher or not sks:
             flash('Field canot be empty')
         else:
             subject = Subject.query.filter_by(id=id).first()
             subject.subject_id = subject_id
             subject.subject_name = subject_name
             subject.subject_teacher = subject_teacher
+            subject.sks = sks
             db.session.commit()
 
             return redirect(url_for('admin.view_subject'))
@@ -233,8 +298,6 @@ def profile():
 @admin.route('/admin/profile/update', methods=['GET', 'POST'])
 @login_required
 def update_profile():
-    profile = Profile_Employee.query.filter_by(id=current_user.id).first()
-
     if request.method == 'POST':
         name = request.form.get('p_name')
         role = request.form.get('p_role')
@@ -247,9 +310,13 @@ def update_profile():
             user = User.query.filter_by(id=current_user.id).first()
             user.user_name = name
             user.user_role = role
-            profile.email = email
-            profile.telp = telp
+            profile = Profile_Employee(
+                employee_id = current_user.user_id,
+                email = email,
+                telp = telp
+            )
+            db.session.add(profile)
             db.session.commit()
 
             return redirect(url_for('admin.profile'))
-    return render_template('admin/update_admin_profile.html', this_user=current_user, profile=profile)
+    return render_template('admin/update_admin_profile.html', this_user=current_user)
