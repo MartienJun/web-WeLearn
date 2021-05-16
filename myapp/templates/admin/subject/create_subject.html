@@ -36,7 +36,7 @@
                         <label for="">Subject Teacher</label>
                         <select name="s_teacher" id="" class="form-control">
                         {% for user in users %}
-                            <option value="{{ user.user_id }}">{{ user.user_id }}</option>   
+                            <option value="{{ user.user_id }}">{{ user.user_id }} - {{ user.user_name }}</option>   
                         {% endfor %}
                         </select>
                     </div>

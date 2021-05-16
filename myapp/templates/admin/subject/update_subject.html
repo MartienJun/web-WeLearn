@@ -37,9 +37,9 @@
                         <select name="s_teacher" id="" class="form-control">
                         {% for user in users %}
                             {% if user.user_id == subject.subject_teacher %}
-                                <option value="{{ user.user_id }}" selected>{{ user.user_id }}</option>
+                                <option value="{{ user.user_id }}" selected>{{ user.user_id }} - {{ user.user_name }}</option>
                             {% else %}
-                                <option value="{{ user.user_id }}">{{ user.user_id }}</option>
+                                <option value="{{ user.user_id }}">{{ user.user_id }} - {{ user.user_name }}</option>
                             {% endif %}   
                         {% endfor %}
                         </select>

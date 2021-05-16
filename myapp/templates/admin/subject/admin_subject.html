@@ -28,7 +28,7 @@
                             <th class="text-center">ID</th>
                             <th class="text-center">Subject ID</th>
                             <th class="text-center">Subject Name</th>
-                            <th class="text-center">Teacher ID</th>
+                            <th class="text-center">Teacher Name</th>
                             <th class="text-center"></th>
                         </tr>
                     </thead>
@@ -42,7 +42,7 @@
                             <!-- {{ subject.subject_teacher }} -->
                             {% for user in users %}
                                 {% if user.user_id == subject.subject_teacher %}
-                                    {{ user.user_name }}
+                                {{ user.user_id }} - {{ user.user_name }}
                                 {% endif %}
                             {% endfor %}
                             </td> 
