@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from myapp.models import User, Role, News, Subject
+from myapp.models import User, News, Subject, Profile_Employee
 from myapp import db, files
 from flask_login import current_user, login_required
 
@@ -222,3 +222,34 @@ def delete_user(id):
     return redirect(url_for('admin.view_user'))
 
 #---------------------------------------------------------
+
+@admin.route('/admin/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    profile = Profile_Employee.query.filter_by(id=current_user.id).first()
+    return render_template('admin/admin_profile.html', this_user=current_user, profile=profile)
+
+
+@admin.route('/admin/profile/update', methods=['GET', 'POST'])
+@login_required
+def update_profile():
+    profile = Profile_Employee.query.filter_by(id=current_user.id).first()
+
+    if request.method == 'POST':
+        name = request.form.get('p_name')
+        role = request.form.get('p_role')
+        email = request.form.get('p_email')
+        telp = request.form.get('p_telp')
+
+        if not name or not role or not email or not telp:
+            flash('Field canot be empty')
+        else:
+            user = User.query.filter_by(id=current_user.id).first()
+            user.user_name = name
+            user.user_role = role
+            profile.email = email
+            profile.telp = telp
+            db.session.commit()
+
+            return redirect(url_for('admin.profile'))
+    return render_template('admin/update_admin_profile.html', this_user=current_user, profile=profile)
