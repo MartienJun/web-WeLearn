@@ -36,9 +36,10 @@ class News(db.Model):
 
 class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    subject_id = db.Column(db.String(7), nullable=False)
+    subject_id = db.Column(db.String(7), unique=True, nullable=False)
     subject_name = db.Column(db.String(255), nullable=False)
     subject_teacher = db.Column(db.String(7), db.ForeignKey('user.user_id', onupdate='CASCADE', ondelete='SET NULL'), nullable=True)
+    sks = db.Column(db.Integer, nullable=False)
     subject_name = db.Column(db.String(255), nullable=False)
 
     def __repr__(self) -> str:
@@ -53,3 +54,24 @@ class Profile_Employee(db.Model):
 
     def __repr__(self) -> str:
         return  '<Role %s>' % self.employee_id
+
+
+class Class(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    class_id = db.Column(db.String(7), unique=True, nullable=False)
+    class_name = db.Column(db.String(255), unique=True, nullable=False)
+    schedule = db.relationship('Schedule', backref='schedule', lazy=True)
+
+    def __repr__(self) -> str:
+        return  '<Role %s>' % self.class_id
+
+
+class Schedule(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    schedule_class = db.Column(db.String(7), db.ForeignKey('class.class_id', onupdate='CASCADE', ondelete='CASCADE'), nullable=True)
+    day = db.Column(db.String(10), nullable=False)
+    start_time = db.Column(db.String(10), nullable=False)
+    end_time = db.Column(db.String(10), nullable=False)
+
+    def __repr__(self) -> str:
+        return  '<Role %s>' % self.schedule_class
