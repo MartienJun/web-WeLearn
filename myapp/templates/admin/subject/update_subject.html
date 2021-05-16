@@ -45,6 +45,14 @@
                         </select>
                     </div>
 
+                    <div class="form-group">
+                        <label for="">SKS</label>
+                        <select name="sks" id="" class="form-control">
+                            <option value="2" {% if subject.sks == 2 %}selected{% endif %}>2</option> 
+                            <option value="4" {% if subject.sks == 4 %}selected{% endif %}>4</option> 
+                        </select>
+                    </div>
+
                     <button type="submit" value="create subject" class="btn btn-dark btn-user btn-block mt-5">
                         Submit
                     </button>
