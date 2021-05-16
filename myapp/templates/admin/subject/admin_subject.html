@@ -38,7 +38,14 @@
                             <td class="text-center">{{ subject.id }}</td>
                             <td class="text-center">{{ subject.subject_id }}</td>
                             <td class="text-center">{{ subject.subject_name }}</td>
-                            <td class="text-center">{{ subject.subject_teacher }}</td>
+                            <td class="text-center">
+                            <!-- {{ subject.subject_teacher }} -->
+                            {% for user in users %}
+                                {% if user.user_id == subject.subject_teacher %}
+                                    {{ user.user_name }}
+                                {% endif %}
+                            {% endfor %}
+                            </td> 
                             <td class="d-flex justify-content-center">
                                 <a class="btn btn-warning btn-icon-split mx-2" href="{{ url_for('admin.update_subject', id=subject.id) }}">
                                     <span class="text">
