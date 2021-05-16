@@ -29,6 +29,7 @@
                             <th class="text-center">Subject ID</th>
                             <th class="text-center">Subject Name</th>
                             <th class="text-center">Teacher Name</th>
+                            <th class="text-center">SKS</th>
                             <th class="text-center"></th>
                         </tr>
                     </thead>
@@ -46,6 +47,7 @@
                                 {% endif %}
                             {% endfor %}
                             </td> 
+                            <td class="text-center">{{ subject.sks }}</td>
                             <td class="d-flex justify-content-center">
                                 <a class="btn btn-warning btn-icon-split mx-2" href="{{ url_for('admin.update_subject', id=subject.id) }}">
                                     <span class="text">
