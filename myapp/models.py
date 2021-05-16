@@ -1,15 +1,19 @@
 from myapp import db
 from flask_login import UserMixin
 
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(7), unique=True, nullable=False)
     user_name = db.Column(db.String(255), nullable=False)
     user_role = db.Column(db.String(7), db.ForeignKey('role.role_id', onupdate='CASCADE'), nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    subject = db.relationship('Subject', backref='teacher', lazy=True)
+    #profile = db.relationship('Profile', backref='user_id', lazy=True)
 
     def __repr__(self) -> str:
         return '<User %s>' % self.user_name
+
 
 class Role(db.Model):
     role_id = db.Column(db.String(7), primary_key=True)
@@ -18,6 +22,7 @@ class Role(db.Model):
 
     def __repr__(self) -> str:
         return  '<Role %s>' % self.role_name
+
 
 class News(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,6 +33,7 @@ class News(db.Model):
     def __repr__(self) -> str:
         return  '<Role %s>' % self.news_title
 
+
 class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     subject_id = db.Column(db.String(7), nullable=False)
@@ -37,3 +43,10 @@ class Subject(db.Model):
 
     def __repr__(self) -> str:
         return  '<Role %s>' % self.subject_name
+
+
+# class Profile(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.String(7), db.ForeignKey('user.user_id', onupdate='CASCADE', ondelete='CASCADE'), nullable=True)
+#     email = db.Column(db.String(255), unique=True, nullable=False)
+#     telp = db.Column(db.String(15), unique=True, nullable=False)
