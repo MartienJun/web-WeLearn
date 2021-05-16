@@ -104,8 +104,9 @@ def view_schedule():
 @admin.route('/admin/subject')
 @login_required
 def view_subject():
+    users = User.query.filter_by(user_role='tch').all()
     subjects = Subject.query.all()
-    return render_template('admin/subject/admin_subject.html', this_user=current_user, subjects=subjects)
+    return render_template('admin/subject/admin_subject.html', this_user=current_user, subjects=subjects, users=users)
 
 
 @admin.route('/admin/subject/create', methods=['GET', 'POST'])
