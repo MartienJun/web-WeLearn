@@ -41,6 +41,7 @@ class Subject(db.Model):
     subject_teacher = db.Column(db.String(7), db.ForeignKey('user.user_id', onupdate='CASCADE', ondelete='SET NULL'), nullable=True)
     sks = db.Column(db.Integer, nullable=False)
     subject_name = db.Column(db.String(255), nullable=False)
+    schedule = db.relationship('Schedule', backref='schedule_subject', lazy=True)
 
     def __repr__(self) -> str:
         return  '<Role %s>' % self.subject_name
@@ -60,7 +61,7 @@ class Class(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     class_id = db.Column(db.String(7), unique=True, nullable=False)
     class_name = db.Column(db.String(255), unique=True, nullable=False)
-    schedule = db.relationship('Schedule', backref='schedule', lazy=True)
+    schedule = db.relationship('Schedule', backref='schedule_c', lazy=True)
 
     def __repr__(self) -> str:
         return  '<Role %s>' % self.class_id
@@ -68,10 +69,11 @@ class Class(db.Model):
 
 class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    schedule_class = db.Column(db.String(7), db.ForeignKey('class.class_id', onupdate='CASCADE', ondelete='CASCADE'), nullable=True)
+    schedule_class = db.Column(db.String(7), db.ForeignKey('class.class_id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
     day = db.Column(db.String(10), nullable=False)
     start_time = db.Column(db.String(10), nullable=False)
     end_time = db.Column(db.String(10), nullable=False)
+    subject = db.Column(db.String(7), db.ForeignKey('subject.subject_id', onupdate='CASCADE', ondelete='SET NULL'), nullable=True)
 
     def __repr__(self) -> str:
         return  '<Role %s>' % self.schedule_class
