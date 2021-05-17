@@ -1,0 +1,74 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Dashboard Admin{% endblock title %}
+
+{% block nav_schedule_active %}active{% endblock nav_schedule_active %}
+
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endfor %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 align-self-center">
+            <div class="p-5">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 font-weight-bold text-gray-800">Update Schedule</h1>
+                </div>
+                <form class="user" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="">Class</label>
+                        <select class="form-control" name="s_class">
+                        {% for class in all_class %}
+                            {% if schedule.schedule_class == class.class_id %}
+                                <option value="{{ class.class_id }}" selected>{{ class.class_name }}</option>
+                            {% else %}
+                                <option value="{{ class.class_id }}">{{ class.class_name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Day</label>
+                        <input class="form-control" name="s_day" type="text" value="{{ schedule.day }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Start Time</label>
+                        <input class="form-control" name="s_start" type="text" value="{{ schedule.start_time }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="">End Time</label>
+                        <input class="form-control" name="s_end" type="text" value="{{ schedule.end_time }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Subject</label>
+                        <select class="form-control" name="s_subject">
+                        {% for subject in subjects %}
+                            {% if schedule.subject == subject.subject_id %}
+                                <option value="{{ subject.subject_id }}" selected>{{ subject.subject_id }} - {{ subject.subject_name }}</option>
+                            {% else %}
+                                <option value="{{ subject.subject_id }}">{{ subject.subject_id }} - {{ subject.subject_name }}</option>
+                            {% endif %}   
+                        {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" value="create schedule" class="btn btn-dark btn-user btn-block mt-5">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
