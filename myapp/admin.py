@@ -138,27 +138,29 @@ def create_schedule():
     return render_template('admin/schedule/create_schedule.html', this_user=current_user, subjects=subjects, all_class=all_class)
 
 
-# @admin.route('/<int:id>/admin/subject/update', methods=['GET', 'POST'])
-# @login_required
-# def update_subject(id):
-#     if request.method == 'POST':
-#         subject_id = request.form.get('s_id')
-#         subject_name = request.form.get('s_name')
-#         subject_teacher = request.form.get('s_teacher')
-#         sks = request.form.get('sks')
+@admin.route('/<int:id>/admin/schedule/update', methods=['GET', 'POST'])
+@login_required
+def update_schedule(id):
+    all_class = Class.query.all()
+    subjects = Subject.query.all()
+    schedule = Schedule.query.filter_by(id=id).first()
 
-#         if not subject_id or not subject_name or not subject_teacher or not sks:
-#             flash('Field canot be empty')
-#         else:
-#             subject = Subject.query.filter_by(id=id).first()
-#             subject.subject_id = subject_id
-#             subject.subject_name = subject_name
-#             subject.subject_teacher = subject_teacher
-#             subject.sks = sks
-#             db.session.commit()
+    if request.method == 'POST':
+        schedule_class = request.form.get('s_class')
+        schedule_day = request.form.get('s_day')
+        schedule_start = request.form.get('s_start')
+        schedule_end = request.form.get('s_end')
+        subject = request.form.get('s_subject')
+        
+        if not schedule_class or not schedule_day or not schedule_start or not schedule_end or not subject:
+            flash('Field canot be empty')
+        else:
+            new_schedule = Schedule(schedule_class=schedule_class, day=schedule_day, start_time=schedule_start, end_time=schedule_end, subject=subject)
+            db.session.add(new_schedule)
+            db.session.commit()
 
-#             return redirect(url_for('admin.view_subject'))
-#     return render_template('admin/subject/update_subject.html', this_user=current_user, users=users, subject=Subject.query.filter_by(id=id).first())
+            return redirect(url_for('admin.view_schedule'))
+    return render_template('admin/schedule/update_schedule.html', this_user=current_user, schedule=schedule, all_class=all_class, subjects=subjects)
 
 
 
