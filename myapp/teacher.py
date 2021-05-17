@@ -33,6 +33,8 @@ def profile():
 @teacher.route('/teacher/profile/update', methods=['GET', 'POST'])
 @login_required
 def update_profile():
+    profile = Profile_Employee.query.filter_by(employee_id=current_user.user_id).first()
+
     if request.method == 'POST':
         name = request.form.get('p_name')
         role = request.form.get('p_role')
@@ -61,4 +63,4 @@ def update_profile():
             db.session.commit()
 
             return redirect(url_for('teacher.profile'))
-    return render_template('teacher/update_teacher_profile.html')
+    return render_template('teacher/update_teacher_profile.html', profile=profile)
