@@ -1,9 +1,8 @@
 import os
 from flask import Flask
-from flask_login.utils import login_fresh
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_login import LoginManager, login_manager
+from flask_login import LoginManager
 from flask_uploads import UploadSet, configure_uploads
 from flask_uploads.extensions import DOCUMENTS, IMAGES
 
@@ -36,8 +35,12 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
 
     from myapp.admin import admin
-    app.register_blueprint(admin, url_prefix='/')
+    app.register_blueprint(admin, url_prefix='/admin')
 
+    from myapp.teacher import teacher
+    app.register_blueprint(teacher, url_prefix='/teacher')
+
+    #Login manager settings
     login_manager = LoginManager()
     login_manager.login_view = 'auth.signin'
     login_manager.init_app(app)

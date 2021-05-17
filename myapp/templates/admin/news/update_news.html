@@ -23,29 +23,18 @@
                 </div>
                 <form class="user" method="post" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="">News Title</label>
-                        <input class="form-control" name="title" id="title" value="{{ news.news_title }}" type="text">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="">Message</label>
-                        <textarea class="form-control" name="message" id="message" style="height: 250px">{{ news.news_message }}</textarea>
+                        <label>News Title</label>
+                        <input class="form-control" type="text" name="title" value="{{ news.news_title }}">
                     </div>
                     
                     <div class="form-group">
-                        <input class="" type="file" id="file" name="file">
-                        <!-- <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="customFile">
-                            <label class="custom-file-label" for="customFile">Choose file</label>
-                        </div>     -->
+                        <label>Message</label>
+                        <textarea class="form-control" name="message" style="height: 250px">{{ news.news_message }}</textarea>
                     </div>
-
-                    <!-- <script>
-                        $(".custom-file-input").on("change", function() {
-                            var fileName = $(this).val().split("\\").pop();
-                            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                        });
-                    </script> -->
+                    
+                    <div class="form-group">
+                        <input type="file" name="file">
+                    </div>
 
                     <button type="submit" value="create news" class="btn btn-dark btn-user btn-block">
                         Submit

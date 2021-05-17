@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from werkzeug.security import check_password_hash, generate_password_hash
-from myapp.models import User, Role
+from myapp.models import User
 from myapp import db
 from flask_login import login_user, logout_user, current_user, login_required
 
@@ -15,18 +15,19 @@ def signin():
         password = request.form.get('password')
 
         user = User.query.filter_by(user_id=id).first()
-        role = user.user_role
 
-        if not user or password != user.password:
+        if not user or not password or password != user.password:
             flash('Wrong credentials')
         else:
+            role = user.user_role
+            
             #Remeber the user
             login_user(user, remember=True)
             
-            if role == 'adm':
+            if role == 'adm':    
                 return redirect(url_for('admin.dashboard', this_user=current_user))
             elif role == 'tch':
-                return "Teacher Dashboard "
+                return redirect(url_for('teacher.teacher_dashboard'))
             else:
                 return "Student Dashboard "
 

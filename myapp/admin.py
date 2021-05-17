@@ -1,7 +1,5 @@
 import os
-from re import A
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from sqlalchemy.sql.schema import PrimaryKeyConstraint
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from myapp.models import Schedule, User, News, Subject, Profile_Employee, Class
@@ -23,7 +21,7 @@ def dashboard():
 @login_required
 def view_news():
     news = News.query.all()
-    return render_template('admin/news/admin_news.html', this_user=current_user, news=news)
+    return render_template('admin/news/admin_news.html', news=news)
 
 
 @admin.route('/admin/news/create', methods=['GET', 'POST'])
@@ -45,7 +43,7 @@ def create_news():
                 files.save(file)
 
             return redirect(url_for('admin.view_news'))
-    return render_template('admin/news/create_news.html', this_user=current_user)
+    return render_template('admin/news/create_news.html')
 
 
 @admin.route('/<int:id>/admin/news/update', methods=['GET', 'POST'])
@@ -69,7 +67,7 @@ def update_news(id):
                 files.save(file)
 
             return redirect(url_for('admin.view_news'))
-    return render_template('admin/news/update_news.html', this_user=current_user, news=News.query.filter_by(id=id).first())
+    return render_template('admin/news/update_news.html', news=News.query.filter_by(id=id).first())
 
 
 @admin.route('/<int:id>/admin/news/delete', methods=['GET', 'POST'])
@@ -78,19 +76,6 @@ def delete_news(id):
     news = News.query.filter_by(id=id).first()
     db.session.delete(news)
     db.session.commit()
-
-    upload_file_path = os.path.join(os.path.join(os.path.realpath('.'), 'uploads'), news.news_file)
-    print(upload_file_path)
-
-    if os.path.exists(upload_file_path):
-        print('ada')
-    # if news.news_file != "":
-    #     upload_file_path = os.path.join(os.path.realpath('.'), 'uploads')
-    #     print(upload_file_path)
-    #     #os.remove(os.path.join(upload_file_path, news.news_file))
-    #     m = os.path.join(upload_file_path, news.news_file)
-    #     print(m)
-    #     os.system('rm ' + 'm')
     
     return redirect(url_for('admin.view_news'))
 
@@ -111,7 +96,7 @@ def view_schedule():
         else:
             schedule_dict[s.schedule_class] = [s]
 
-    return render_template('admin/schedule/admin_schedule.html', this_user=current_user, subjects=subjects, schedule_dict=schedule_dict, all_class=all_class, users=users)
+    return render_template('admin/schedule/admin_schedule.html', subjects=subjects, schedule_dict=schedule_dict, all_class=all_class, users=users)
 
 
 @admin.route('/admin/schedule/create', methods=['GET', 'POST'])
@@ -135,7 +120,7 @@ def create_schedule():
             db.session.commit()
 
             return redirect(url_for('admin.view_schedule'))
-    return render_template('admin/schedule/create_schedule.html', this_user=current_user, subjects=subjects, all_class=all_class)
+    return render_template('admin/schedule/create_schedule.html', subjects=subjects, all_class=all_class)
 
 
 @admin.route('/<int:id>/admin/schedule/update', methods=['GET', 'POST'])
@@ -160,7 +145,7 @@ def update_schedule(id):
             db.session.commit()
 
             return redirect(url_for('admin.view_schedule'))
-    return render_template('admin/schedule/update_schedule.html', this_user=current_user, schedule=schedule, all_class=all_class, subjects=subjects)
+    return render_template('admin/schedule/update_schedule.html', schedule=schedule, all_class=all_class, subjects=subjects)
 
 
 
@@ -179,7 +164,7 @@ def delete_schedule(id):
 def view_subject():
     users = User.query.filter_by(user_role='tch').all()
     subjects = Subject.query.all()
-    return render_template('admin/subject/admin_subject.html', this_user=current_user, subjects=subjects, users=users)
+    return render_template('admin/subject/admin_subject.html', subjects=subjects, users=users)
 
 
 @admin.route('/admin/subject/create', methods=['GET', 'POST'])
@@ -201,7 +186,7 @@ def create_subject():
             db.session.commit()
 
             return redirect(url_for('admin.view_subject'))
-    return render_template('admin/subject/create_subject.html', this_user=current_user, users=users)
+    return render_template('admin/subject/create_subject.html', users=users)
 
 
 @admin.route('/<int:id>/admin/subject/update', methods=['GET', 'POST'])
@@ -226,7 +211,7 @@ def update_subject(id):
             db.session.commit()
 
             return redirect(url_for('admin.view_subject'))
-    return render_template('admin/subject/update_subject.html', this_user=current_user, users=users, subject=Subject.query.filter_by(id=id).first())
+    return render_template('admin/subject/update_subject.html', users=users, subject=Subject.query.filter_by(id=id).first())
 
 
 @admin.route('/<int:id>/admin/subject/delete', methods=['GET', 'POST'])
@@ -243,7 +228,7 @@ def delete_subject(id):
 @login_required
 def view_user():
     users = User.query.all()
-    return render_template('admin/user/admin_user.html', this_user=current_user, users=users)
+    return render_template('admin/user/admin_user.html', users=users)
 
 
 @admin.route('/admin/user/create', methods=['GET', 'POST'])
@@ -286,7 +271,7 @@ def update_user(id):
             db.session.commit()
 
             return redirect(url_for('admin.view_user'))
-    return render_template('admin/user/update_user.html', this_user=current_user, user=User.query.filter_by(id=id).first())
+    return render_template('admin/user/update_user.html', user=User.query.filter_by(id=id).first())
 
 
 @admin.route('/<int:id>/admin/user/delete', methods=['GET', 'POST'])
@@ -303,12 +288,14 @@ def delete_user(id):
 @login_required
 def profile():
     profile = Profile_Employee.query.filter_by(id=current_user.id).first()
-    return render_template('admin/admin_profile.html', this_user=current_user, profile=profile)
+    return render_template('admin/admin_profile.html', profile=profile)
 
 
 @admin.route('/admin/profile/update', methods=['GET', 'POST'])
 @login_required
 def update_profile():
+    profile = Profile_Employee.query.filter_by(id=current_user.id).first()
+
     if request.method == 'POST':
         name = request.form.get('p_name')
         role = request.form.get('p_role')
@@ -330,4 +317,4 @@ def update_profile():
             db.session.commit()
 
             return redirect(url_for('admin.profile'))
-    return render_template('admin/update_admin_profile.html', this_user=current_user)
+    return render_template('admin/update_admin_profile.html', profile=profile)
