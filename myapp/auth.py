@@ -15,18 +15,18 @@ def signin():
         password = request.form.get('password')
 
         user = User.query.filter_by(user_id=id).first()
-        role = user.user_role
-
+        role = User.query.filter_by(user_id=id).first().user_role
+        print(role)
         if not user or password != user.password:
             flash('Wrong credentials')
         else:
             #Remeber the user
             login_user(user, remember=True)
             
-            if role == 'adm':
+            if role == 'adm':    
                 return redirect(url_for('admin.dashboard', this_user=current_user))
             elif role == 'tch':
-                return "Teacher Dashboard "
+                return redirect(url_for('teacher.teacher_dashboard'))
             else:
                 return "Student Dashboard "
 
