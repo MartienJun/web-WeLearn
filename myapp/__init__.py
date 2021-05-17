@@ -36,10 +36,10 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
 
     from myapp.admin import admin
-    app.register_blueprint(admin, url_prefix='/')
+    app.register_blueprint(admin, url_prefix='/admin')
 
     from myapp.teacher import teacher
-    app.register_blueprint(teacher, url_prefix='/')
+    app.register_blueprint(teacher, url_prefix='/teacher')
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.signin'
