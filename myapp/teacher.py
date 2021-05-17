@@ -26,7 +26,7 @@ def view_news():
 @teacher.route('/teacher/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    profile = Profile_Employee.query.filter_by(id=current_user.id).first()
+    profile = Profile_Employee.query.filter_by(employee_id=current_user.user_id).first()
     return render_template('teacher/teacher_profile.html', profile=profile)
 
 
@@ -45,12 +45,19 @@ def update_profile():
             user = User.query.filter_by(id=current_user.id).first()
             user.user_name = name
             user.user_role = role
-            profile = Profile_Employee(
-                employee_id = current_user.user_id,
-                email = email,
-                telp = telp
-            )
-            db.session.add(profile)
+
+            profile = Profile_Employee.query.filter_by(employee_id=user.user_id).first()
+            if profile is not None:
+                profile.email = email
+                profile.telp = telp
+            else:
+                profile = Profile_Employee(
+                    employee_id = current_user.user_id,
+                    email = email,
+                    telp = telp
+                )
+                db.session.add(profile)
+            
             db.session.commit()
 
             return redirect(url_for('teacher.profile'))
