@@ -1,7 +1,5 @@
 import os
-from re import A
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from sqlalchemy.sql.schema import PrimaryKeyConstraint
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from myapp.models import Schedule, User, News, Subject, Profile_Employee, Class
