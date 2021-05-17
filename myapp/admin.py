@@ -1,6 +1,7 @@
 import os
 from re import A
 from flask import Blueprint, render_template, flash, redirect, url_for, request
+from sqlalchemy.sql.schema import PrimaryKeyConstraint
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from myapp.models import Schedule, User, News, Subject, Profile_Employee, Class
@@ -102,7 +103,15 @@ def view_schedule():
     schedules = Schedule.query.all()
     all_class = Class.query.all()
     subjects = Subject.query.all()
-    return render_template('admin/schedule/admin_schedule.html', this_user=current_user, subjects=subjects, schedules=schedules, all_class=all_class, users=users)
+    
+    schedule_dict = {}
+    for s in schedules: 
+        if s.schedule_class in schedule_dict:
+            schedule_dict[s.schedule_class].append(s)
+        else:
+            schedule_dict[s.schedule_class] = [s]
+
+    return render_template('admin/schedule/admin_schedule.html', this_user=current_user, subjects=subjects, schedule_dict=schedule_dict, all_class=all_class, users=users)
 
 
 @admin.route('/admin/schedule/create', methods=['GET', 'POST'])
