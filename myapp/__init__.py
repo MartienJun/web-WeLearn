@@ -38,6 +38,9 @@ def create_app():
     from myapp.admin import admin
     app.register_blueprint(admin, url_prefix='/')
 
+    from myapp.teacher import teacher
+    app.register_blueprint(teacher, url_prefix='/')
+
     login_manager = LoginManager()
     login_manager.login_view = 'auth.signin'
     login_manager.init_app(app)
