@@ -29,7 +29,7 @@ def signin():
             elif role == 'tch':
                 return redirect(url_for('teacher.teacher_dashboard'))
             else:
-                return "Student Dashboard "
+                return redirect(url_for('student.student_dashboard'))
 
     return render_template('sign-in.html')
 
