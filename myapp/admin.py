@@ -162,13 +162,13 @@ def create_schedule():
 
 
 
-# @admin.route('/<int:id>/admin/schedule/delete', methods=['GET', 'POST'])
-# @login_required
-# def delete_schedule(id):
-#     schedule = Schedule.query.filter_by(id=id).first()
-#     db.session.delete(schedule)
-#     db.session.commit()
-#     return redirect(url_for('admin.view_schedule'))
+@admin.route('/<int:id>/admin/schedule/delete', methods=['GET', 'POST'])
+@login_required
+def delete_schedule(id):
+    schedule = Schedule.query.filter_by(id=id).first()
+    db.session.delete(schedule)
+    db.session.commit()
+    return redirect(url_for('admin.view_schedule'))
 
 #---------------------------------------------------------
 
