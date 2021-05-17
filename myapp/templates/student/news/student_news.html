@@ -1,0 +1,27 @@
+{% extends 'student/base.html' %}
+
+{% block title %}Dashboard Student{% endblock title %}
+
+{% block nav_news_active %}active{% endblock nav_news_active %}
+
+{% block student_content %}
+<div class="container-fluid">
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-12">
+            {% for news in news %}
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-dark">{{ news.news_title }}</h6>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        {{ news.news_message }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock student_content %}

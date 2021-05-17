@@ -40,6 +40,9 @@ def create_app():
     from myapp.teacher import teacher
     app.register_blueprint(teacher, url_prefix='/teacher')
 
+    from myapp.student import student
+    app.register_blueprint(student, url_prefix='/student')
+
     #Login manager settings
     login_manager = LoginManager()
     login_manager.login_view = 'auth.signin'
