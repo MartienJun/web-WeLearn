@@ -294,6 +294,8 @@ def profile():
 @admin.route('/admin/profile/update', methods=['GET', 'POST'])
 @login_required
 def update_profile():
+    profile = Profile_Employee.query.filter_by(id=current_user.id).first()
+
     if request.method == 'POST':
         name = request.form.get('p_name')
         role = request.form.get('p_role')
