@@ -28,7 +28,7 @@ def create_app():
     migrate = Migrate(app, db)
 
     #Import models
-    from myapp.models import User, Role, News, Subject
+    from myapp.models import User, Role, News, Subject, Module
 
     #Import blueprint
     from myapp.auth import auth

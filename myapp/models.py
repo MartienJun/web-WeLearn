@@ -1,3 +1,4 @@
+from sqlalchemy.orm import backref
 from myapp import db
 from flask_login import UserMixin
 
@@ -42,6 +43,7 @@ class Subject(db.Model):
     sks = db.Column(db.Integer, nullable=False)
     subject_name = db.Column(db.String(255), nullable=False)
     schedule = db.relationship('Schedule', backref='schedule_subject', lazy=True)
+    subject_module = db.relationship('Module', backref='subject_module', lazy=True)
 
     def __repr__(self) -> str:
         return  '<Role %s>' % self.subject_name
@@ -77,3 +79,61 @@ class Schedule(db.Model):
 
     def __repr__(self) -> str:
         return  '<Role %s>' % self.schedule_class
+
+
+class Module(db.Model):
+    module_id = db.Column(db.String(7), db.ForeignKey('subject.subject_id', onupdate='CASCADE', ondelete='CASCADE'), primary_key=True, nullable=False)
+    topic_1 = db.Column(db.String(255), nullable=True)
+    about_topic_1 = db.Column(db.String(255), nullable=True)
+    assignment_1 = db.Column(db.String(255), nullable=True)
+    
+    topic_2 = db.Column(db.String(255), nullable=True)
+    about_topic_2 = db.Column(db.String(255), nullable=True)
+    assignment_2 = db.Column(db.String(255), nullable=True)
+    
+    topic_3 = db.Column(db.String(255), nullable=True)
+    about_topic_3 = db.Column(db.String(255), nullable=True)
+    assignment_3 = db.Column(db.String(255), nullable=True)
+    
+    topic_4 = db.Column(db.String(255), nullable=True)
+    about_topic_4 = db.Column(db.String(255), nullable=True)
+    assignment_4 = db.Column(db.String(255), nullable=True)
+    
+    topic_5 = db.Column(db.String(255), nullable=True)
+    about_topic_5 = db.Column(db.String(255), nullable=True)
+    assignment_5 = db.Column(db.String(255), nullable=True)
+    
+    topic_6 = db.Column(db.String(255), nullable=True)
+    about_topic_6 = db.Column(db.String(255), nullable=True)
+    assignment_6 = db.Column(db.String(255), nullable=True)
+    
+    topic_7 = db.Column(db.String(255), nullable=True)
+    about_topic_7 = db.Column(db.String(255), nullable=True)
+    assignment_7 = db.Column(db.String(255), nullable=True)
+    
+    topic_8 = db.Column(db.String(255), nullable=True)
+    about_topic_8 = db.Column(db.String(255), nullable=True)
+    assignment_8 = db.Column(db.String(255), nullable=True)
+    
+    topic_9 = db.Column(db.String(255), nullable=True)
+    about_topic_9 = db.Column(db.String(255), nullable=True)
+    assignment_9 = db.Column(db.String(255), nullable=True)
+    
+    topic_10 = db.Column(db.String(255), nullable=True)
+    about_topic_10 = db.Column(db.String(255), nullable=True)
+    assignment_10 = db.Column(db.String(255), nullable=True)
+    
+    topic_11 = db.Column(db.String(255), nullable=True)
+    about_topic_11 = db.Column(db.String(255), nullable=True)
+    assignment_11 = db.Column(db.String(255), nullable=True)
+    
+    topic_12 = db.Column(db.String(255), nullable=True)
+    about_topic_12 = db.Column(db.String(255), nullable=True)
+    assignment_12 = db.Column(db.String(255), nullable=True)
+    
+    topic_13 = db.Column(db.String(255), nullable=True)
+    about_topic_13 = db.Column(db.String(255), nullable=True)
+    assignment_13 = db.Column(db.String(255), nullable=True)
+
+    def __repr__(self) -> str:
+        return  '<Module %s>' % self.module_id
