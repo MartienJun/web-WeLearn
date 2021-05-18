@@ -47,7 +47,7 @@
             </li>
 
             <li class="nav-item {% block nav_schedule_active %}{% endblock nav_schedule_active %} my-2">
-                <a class="nav-link text-center" href="">
+                <a class="nav-link text-center" href="{{ url_for('teacher.view_schedule') }}">
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                     <span>Schedule</span>
                 </a>
