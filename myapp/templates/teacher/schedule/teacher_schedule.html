@@ -13,7 +13,7 @@
                 <div class="card-header py-3">
                     {% for s in subjects %}
                     {% if subject == s.subject_id %}
-                    <h6 class="m-0 font-weight-bold text-dark">Subject: {{ s.subject_name }}</h6>
+                    <h6 class="m-0 font-weight-bold text-dark">Subject: {{ s.subject_teacher }}</h6>
                     {% endif %}
                     {% endfor %}
                 </div>
@@ -27,7 +27,7 @@
                                     <th class="text-center">Subject</th>
                                     <th class="text-center">Teacher</th>
                                     <th class="text-center">SKS</th>
-                                    <th class="text-center"></th>
+                                    <th class="text-center">Class</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -60,6 +60,8 @@
                                     {% endif %}
                                     {% endfor %}
 
+                                    <!-- Day -->
+                                    <td class="text-center">{{ schedule.schedule_class }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
