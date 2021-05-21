@@ -64,3 +64,28 @@ def update_profile():
 
             return redirect(url_for('teacher.profile'))
     return render_template('teacher/update_teacher_profile.html', profile=profile)
+
+#---------------------------------------------------------
+
+@teacher.route('/teacher/schedule')
+@login_required
+def view_schedule():
+    users = User.query.filter_by(user_role='tch').all()
+    all_class = Class.query.all()
+    profile = Profile_Employee.query.filter_by(employee_id=current_user.user_id).first()
+    subjects = Subject.query.filter_by(subject_teacher=profile.employee_id).all()
+    subject_filter=[]
+
+    for subject in subjects:
+        subject_filter.append(subject.subject_id)
+
+    schedules = Schedule.query.filter(Schedule.subject.in_(subject_filter)).all()
+
+    schedule_dict = {}
+    for s in schedules: 
+        if s.subject in schedule_dict:
+            schedule_dict[s.subject].append(s)
+        else:
+            schedule_dict[s.subject] = [s]
+
+    return render_template('teacher/schedule/teacher_schedule.html', subjects=subjects, schedule_dict=schedule_dict, all_class=all_class, users=users)
