@@ -1,3 +1,4 @@
+from sqlalchemy.orm import backref
 from myapp import db
 from flask_login import UserMixin
 
@@ -42,6 +43,7 @@ class Subject(db.Model):
     sks = db.Column(db.Integer, nullable=False)
     subject_name = db.Column(db.String(255), nullable=False)
     schedule = db.relationship('Schedule', backref='schedule_subject', lazy=True)
+    subject_module = db.relationship('Module', backref='subject_module', lazy=True)
 
     def __repr__(self) -> str:
         return  '<Role %s>' % self.subject_name
@@ -77,3 +79,15 @@ class Schedule(db.Model):
 
     def __repr__(self) -> str:
         return  '<Role %s>' % self.schedule_class
+
+
+
+class Module(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    subject_id = db.Column(db.String(7), db.ForeignKey('subject.subject_id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
+    topic = db.Column(db.String(255), nullable=True)
+    about_topic = db.Column(db.String(255), nullable=True)
+    assignment = db.Column(db.String(255), nullable=True)
+
+    def __repr__(self) -> str:
+        return  '<Module %s>' % self.module_id

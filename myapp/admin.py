@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from myapp.models import Schedule, User, News, Subject, Profile_Employee, Class
+from myapp.models import Schedule, User, News, Subject, Profile_Employee, Class, Module
 from myapp import db, files
 from flask_login import current_user, login_required
 
@@ -221,6 +221,15 @@ def delete_subject(id):
     db.session.delete(subject)
     db.session.commit()
     return redirect(url_for('admin.view_subject'))
+
+#---------------------------------------------------------
+
+@admin.route('/admin/module/')
+def view_module():
+    subjects = Subject.query.all()
+    modules = Module.query.all()
+    return render_template('admin/module/view_module.html', subjects=subjects, modules=modules)
+
 
 #---------------------------------------------------------
 
