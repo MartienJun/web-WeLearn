@@ -1,0 +1,76 @@
+{% extends 'student/base.html' %}
+
+{% block title %}Dashboard student{% endblock title %}
+
+{% block nav_schedule_active %}active{% endblock nav_schedule_active %}
+
+{% block student_content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            {% for subject, schedules in schedule_dict.items() %}
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    {% for s in subjects %}
+                    {% if subject == s.subject_id %}
+                    <h6 class="m-0 font-weight-bold text-dark">Subject: {{ s.subject_teacher }}</h6>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered post" id="dataTable" width="100%" cellspacing="0">
+                            <thead class="text-dark">
+                                <tr>
+                                    <th class="text-center">Day</th>
+                                    <th class="text-center">Time</th>
+                                    <th class="text-center">Subject</th>
+                                    <th class="text-center">Teacher</th>
+                                    <th class="text-center">SKS</th>
+                                    <th class="text-center">Class</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for schedule in schedules %}
+                                <tr>
+                                    <!-- Day -->
+                                    <td class="text-center">{{ schedule.day }}</td>
+
+                                    <!-- Start - End Time -->
+                                    <td class="text-center">{{ schedule.start_time }} - {{ schedule.end_time }}</td>
+
+                                    {% for subject in subjects %}
+                                    {% if subject.subject_id == schedule.subject %}
+                                    <!-- Subject Name -->
+                                    <td class="text-center">{{ subject.subject_name }}</td>
+
+                                    <!-- Subject Teacher -->
+                                    <td class="text-center">
+                                        {% for user in users %}
+                                        {% if user.user_id == subject.subject_teacher %}
+                                        {{ user.user_id }} - {{ user.user_name }}
+                                        {% endif %}
+                                        {% endfor %}
+                                    </td>
+
+                                    <!-- SKS -->
+                                    <td class="text-center">
+                                        {{ subject.sks }}
+                                    </td>
+                                    {% endif %}
+                                    {% endfor %}
+
+                                    <!-- Day -->
+                                    <td class="text-center">{{ schedule.schedule_class }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock student_content %}

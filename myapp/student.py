@@ -61,4 +61,24 @@ def update_profile():
             db.session.commit()
 
             return redirect(url_for('student.profile'))
+
+            
     return render_template('student/update_student_profile.html')
+
+
+@student.route('/student/schedule')
+@login_required
+def view_schedule():
+    users = User.query.filter_by(user_role='tch').all()
+    schedules = Schedule.query.all()
+    all_class = Class.query.all()
+    subjects = Subject.query.all()
+    
+    schedule_dict = {}
+    for s in schedules: 
+        if s.schedule_class in schedule_dict:
+            schedule_dict[s.schedule_class].append(s)
+        else:
+            schedule_dict[s.schedule_class] = [s]
+
+    return render_template('student/schedule/student_schedule.html', subjects=subjects, schedule_dict=schedule_dict, all_class=all_class, users=users)
