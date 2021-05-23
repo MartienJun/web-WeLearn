@@ -64,6 +64,7 @@ class Class(db.Model):
     class_id = db.Column(db.String(7), unique=True, nullable=False)
     class_name = db.Column(db.String(255), unique=True, nullable=False)
     schedule = db.relationship('Schedule', backref='schedule_c', lazy=True)
+    student = db.relationship('Profile_Student', backref='student_c', lazy=True)
 
     def __repr__(self) -> str:
         return  '<Role %s>' % self.class_id
@@ -91,3 +92,14 @@ class Module(db.Model):
 
     def __repr__(self) -> str:
         return  '<Module %s>' % self.module_id
+
+
+class Profile_Student(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.String(7), db.ForeignKey('user.user_id', onupdate='CASCADE', ondelete='CASCADE'), nullable=True)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    telp = db.Column(db.String(15), unique=True, nullable=False)
+    student_class = db.Column(db.String(7), db.ForeignKey('class.class_id', onupdate='CASCADE', ondelete='CASCADE'), nullable=True)
+
+    def __repr__(self) -> str:
+        return  '<Student %s>' % self.student_id
