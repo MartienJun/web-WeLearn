@@ -2,7 +2,7 @@ import os
 from myapp import db, files
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
-from myapp.models import Schedule, User, News, Subject, Profile_Employee, Class
+from myapp.models import Schedule, User, News, Subject, Profile_Employee, Class, Module
 
 
 teacher = Blueprint('teacher', __name__)
@@ -89,3 +89,11 @@ def view_schedule():
             schedule_dict[s.subject] = [s]
 
     return render_template('teacher/schedule/teacher_schedule.html', subjects=subjects, schedule_dict=schedule_dict, all_class=all_class, users=users)
+
+#---------------------------------------------------------
+
+@teacher.route('/teacher/module/')
+def view_module():
+    subjects = Subject.query.all()
+    modules = Module.query.all()
+    return render_template('teacher/module/view_module.html', subjects=subjects, modules=modules)
