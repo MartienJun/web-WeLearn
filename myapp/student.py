@@ -2,7 +2,7 @@ import os
 from myapp import db, files
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
-from myapp.models import Schedule, User, News, Subject, Profile_Employee, Class
+from myapp.models import Profile_Student, Schedule, User, News, Subject, Profile_Employee, Class
 
 
 student = Blueprint('student', __name__)
@@ -71,8 +71,15 @@ def update_profile():
 def view_schedule():
     users = User.query.filter_by(user_role='tch').all()
     schedules = Schedule.query.all()
-    all_class = Class.query.all()
     subjects = Subject.query.all()
+    profile = Profile_Employee.query.filter_by(employee_id=current_user.user_id).first()
+    all_class = Class.query.filter_by(class_id=profile.employee_id).all()
+    #class_filter=[]
+
+    #for class in Class:
+       #class_filter.append(class.class_id)
+
+    #schedules = Schedule.query.filter(Schedule.subject.in_(class_filter)).all()
     
     schedule_dict = {}
     for s in schedules: 
