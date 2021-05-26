@@ -70,17 +70,16 @@ def update_profile():
 @login_required
 def view_schedule():
     users = User.query.filter_by(user_role='tch').all()
-    schedules = Schedule.query.all()
+    profile = Profile_Student.query.filter_by(student_id=current_user.user_id).first()
+    all_class = Class.query.filter_by(class_id=profile.student_class).all()
     subjects = Subject.query.all()
-    profile = Profile_Employee.query.filter_by(employee_id=current_user.user_id).first()
-    all_class = Class.query.filter_by(class_id=profile.employee_id).all()
-    #class_filter=[]
+    class_filter=[]
 
-    #for class in Class:
-       #class_filter.append(class.class_id)
+    for Profile in all_class:
+        class_filter.append(Profile.class_id)
 
-    #schedules = Schedule.query.filter(Schedule.subject.in_(class_filter)).all()
-    
+    schedules = Schedule.query.filter(Schedule.schedule_class.in_(class_filter)).all()
+
     schedule_dict = {}
     for s in schedules: 
         if s.schedule_class in schedule_dict:
