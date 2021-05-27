@@ -2,7 +2,7 @@ import os
 from myapp import db, files
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
-from myapp.models import Profile_Student, Schedule, User, News, Subject, Profile_Employee, Class
+from myapp.models import Module, Profile_Student, Schedule, User, News, Subject, Profile_Employee, Class
 
 
 student = Blueprint('student', __name__)
@@ -65,6 +65,13 @@ def update_profile():
             
     return render_template('student/update_student_profile.html')
 
+@student.route('/student/module/')
+@login_required
+def view_module():
+    subjects = Subject.query.all()
+    modules = Module.query.all()
+    
+    return render_template('student/module/view_module.html', subjects=subjects, modules=modules)
 
 @student.route('/student/schedule')
 @login_required

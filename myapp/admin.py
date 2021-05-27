@@ -225,11 +225,32 @@ def delete_subject(id):
 #---------------------------------------------------------
 
 @admin.route('/admin/module/')
+@login_required
 def view_module():
     subjects = Subject.query.all()
     modules = Module.query.all()
     return render_template('admin/module/view_module.html', subjects=subjects, modules=modules)
 
+@admin.route('/admin/module/create', methods=['GET', 'POST'])
+@login_required
+def create_module():
+    subjects = Subject.query.all()
+    modules = Module.query.all()
+    if request.method == 'POST':
+        subject_id = request.form.get('m_subject')
+        subject_topic = request.form.get('m_topic')
+        subject_detail = request.form.get('m_about_topic')
+        subject_assignment = request.form.get('m_assignment')
+
+        if not subject_id or not subject_topic or not subject_detail:
+            flash('Field canot be empty')
+        else:
+            new_module = Module(subject_id=subject_id, topic=subject_topic, about_topic=subject_detail, assignment=subject_assignment)
+            db.session.add(new_module)
+            db.session.commit()
+
+        return redirect(url_for('admin.view_module'))
+    return render_template('admin/module/create_module.html', subjects=subjects, modules=modules)
 
 #---------------------------------------------------------
 

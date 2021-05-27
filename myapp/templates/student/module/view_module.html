@@ -1,6 +1,6 @@
-{% extends 'admin/base.html' %}
+{% extends 'student/base.html' %}
 
-{% block title %}Dashboard Admin{% endblock title %}
+{% block title %}Dashboard student{% endblock title %}
 
 {% block nav_module_active %}active{% endblock nav_module_active %}
 
@@ -9,7 +9,7 @@
     <!-- Content Row -->
     <div class="row mb-5">
         <div class="col-xl-12 col-md-12 mb-12">
-            <a class="btn btn-dark btn-icon-split mr-4" href="{{ url_for('admin.create_module') }}">
+            <a class="btn btn-dark btn-icon-split mr-4" href="{{ url_for('student.create_module') }}">
                 <span class="icon text-white-50"><i class="fa fa-plus" aria-hidden="true"></i></span>
                 <span class="text">Add New Module</span>
             </a>
@@ -62,42 +62,6 @@
                                     <div class="form-group">
                                         <label>Attachment </label>
                                         <a href="">{{ module.assignment }}</a>
-
-                                        <a class="btn btn-warning btn-icon-split mx-2" href="{{ url_for('admin.update_module', id=module.id) }}">
-                                            <span class="text">
-                                                <i class="fa fa-wrench" aria-hidden="true"></i>
-                                            </span>
-                                        </a>
-
-                                        <a class="btn btn-danger btn-icon-split mx-2" data-toggle="modal" data-target="#deleteUserModal{{ module.id }}">
-                                            <span class="icon text">
-                                                <i class="fa fa-trash" aria-hidden="true"></i>
-                                            </span>
-                                        </a>
-
-                                        <div class="modal fade" id="deleteUserModal{{ module.id }}" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-                                            <div class="modal-dialog  modal-dialog-centered" role="document" me>
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="">Delete this module?</h5>
-                                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">×</span>
-                                                        </button>
-                                                    </div>
-        
-                                                    <div class="modal-body">
-                                                        <p>This module will be removed from database.</p>
-                                                    </div>
-        
-                                                    <div class="modal-footer">
-                                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                                        <form method="post">
-                                                            <a class="btn btn-danger" type="submit" href="{{ url_for('admin.delete_module', id=module.id) }}">Delete</a>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                     {% endif %}
                                     {% endfor %}
