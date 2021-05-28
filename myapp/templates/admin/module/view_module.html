@@ -5,6 +5,7 @@
 {% block nav_module_active %}active{% endblock nav_module_active %}
 
 {% block content %}
+
 <div class="container-fluid">
     <!-- Content Row -->
     <div class="row mb-5">
@@ -42,13 +43,14 @@
                     </div>
                     
                     <div class="col-12 mb-4">
+                    
                     {% for i in range(1, 14) %}
                         <div style="display: none;" id="moduleDetail{{ i }}">
                             <div class="card-body">
                                 <form class="user" method="post" enctype="multipart/form-data">
                                     
                                     {% for module in modules %}
-                                        {% if module.id == i %}
+                                    {% if module.id == i %}
                                     <div class="form-group">
                                         <label>Topic</label>
                                         <input class="form-control" type="text" name="m_topic" value="{{ module.topic }}" disabled>
@@ -61,8 +63,11 @@
                                     
                                     <div class="form-group">
                                         <label>Attachment </label>
-                                        <a href="">{{ module.assignment }}</a>
-
+                                        <form method="post" enctype="multipart/form-data" action="upload.php">
+                                        <a href=""><input type="file" id="myFile" name="{{ module.assignment }}">{{ module.assignment }}</a>
+                                        <button>Submit</button>
+                                        </form>
+                                        <a href="uploads/<?php echo $files[$a]; ?>" download> Download </a>
                                         <a class="btn btn-warning btn-icon-split mx-2" href="{{ url_for('admin.update_module', id=module.id) }}">
                                             <span class="text">
                                                 <i class="fa fa-wrench" aria-hidden="true"></i>
