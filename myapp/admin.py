@@ -252,6 +252,37 @@ def create_module():
         return redirect(url_for('admin.view_module'))
     return render_template('admin/module/create_module.html', subjects=subjects, modules=modules)
 
+@admin.route('/<int:id>/admin/module/update', methods=['GET', 'POST'])
+@login_required
+def update_module(id):
+    modules = Module.query.filter_by(id=id).first()
+    subjects = Subject.query.all()
+    if request.method == 'POST':
+        subject_topic = request.form.get('m_topic')
+        subject_about_topic = request.form.get('m_about_topic')
+        subject_assignment = request.form.get('m_assignment')
+
+        if not subject_topic or not subject_about_topic or not subject_assignment:
+            flash('Field canot be empty')
+        else:
+            modules = Module.query.filter_by(id=id).first()
+            subjects = Subject.query.all()
+            modules.topic = subject_topic
+            modules.about_topic = subject_about_topic
+            modules.assignment = subject_assignment
+            db.session.commit()
+
+            return redirect(url_for('admin.view_module'))
+    return render_template('admin/module/update_module.html', subjects=subjects, module=Module.query.filter_by(id=id).first())
+
+@admin.route('/<int:id>/admin/module/delete', methods=['GET', 'POST'])
+@login_required
+def delete_module(id):
+    module = Module.query.filter_by(id=id).first()
+    db.session.delete(module)
+    db.session.commit()
+    return redirect(url_for('admin.view_module'))
+
 #---------------------------------------------------------
 
 @admin.route('/admin/user')

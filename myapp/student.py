@@ -70,8 +70,59 @@ def update_profile():
 def view_module():
     subjects = Subject.query.all()
     modules = Module.query.all()
-    
     return render_template('student/module/view_module.html', subjects=subjects, modules=modules)
+
+@student.route('/student/module/create', methods=['GET', 'POST'])
+@login_required
+def create_module():
+    subjects = Subject.query.all()
+    modules = Module.query.all()
+    if request.method == 'POST':
+        subject_id = request.form.get('m_subject')
+        subject_topic = request.form.get('m_topic')
+        subject_detail = request.form.get('m_about_topic')
+        subject_assignment = request.form.get('m_assignment')
+
+        if not subject_id or not subject_topic or not subject_detail:
+            flash('Field canot be empty')
+        else:
+            new_module = Module(subject_id=subject_id, topic=subject_topic, about_topic=subject_detail, assignment=subject_assignment)
+            db.session.add(new_module)
+            db.session.commit()
+
+        return redirect(url_for('student.view_module'))
+    return render_template('student/module/create_module.html', subjects=subjects, modules=modules)
+
+@student.route('/<int:id>/student/module/update', methods=['GET', 'POST'])
+@login_required
+def update_module(id):
+    modules = Module.query.filter_by(id=id).first()
+    subjects = Subject.query.all()
+    if request.method == 'POST':
+        subject_topic = request.form.get('m_topic')
+        subject_about_topic = request.form.get('m_about_topic')
+        subject_assignment = request.form.get('m_assignment')
+
+        if not subject_topic or not subject_about_topic or not subject_assignment:
+            flash('Field canot be empty')
+        else:
+            modules = Module.query.filter_by(id=id).first()
+            subjects = Subject.query.all()
+            modules.topic = subject_topic
+            modules.about_topic = subject_about_topic
+            modules.assignment = subject_assignment
+            db.session.commit()
+
+            return redirect(url_for('student.view_module'))
+    return render_template('student/module/update_module.html', subjects=subjects, module=Module.query.filter_by(id=id).first())
+
+@student.route('/<int:id>/student/module/delete', methods=['GET', 'POST'])
+@login_required
+def delete_module(id):
+    module = Module.query.filter_by(id=id).first()
+    db.session.delete(module)
+    db.session.commit()
+    return redirect(url_for('student.view_module'))
 
 @student.route('/student/schedule')
 @login_required
