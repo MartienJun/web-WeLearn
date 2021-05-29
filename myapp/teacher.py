@@ -2,7 +2,7 @@ import os
 from myapp import db, files
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
-from myapp.models import Schedule, User, News, Subject, Profile_Employee, Class
+from myapp.models import Schedule, User, News, Subject, Profile_Employee, Class, Module
 
 
 teacher = Blueprint('teacher', __name__)
@@ -89,3 +89,65 @@ def view_schedule():
             schedule_dict[s.subject] = [s]
 
     return render_template('teacher/schedule/teacher_schedule.html', subjects=subjects, schedule_dict=schedule_dict, all_class=all_class, users=users)
+
+#---------------------------------------------------------
+
+@teacher.route('/teacher/module/')
+@login_required
+def view_module():
+    subjects = Subject.query.all()
+    modules = Module.query.all()
+    return render_template('teacher/module/view_module.html', subjects=subjects, modules=modules)
+
+@teacher.route('/teacher/module/create', methods=['GET', 'POST'])
+@login_required
+def create_module():
+    subjects = Subject.query.all()
+    modules = Module.query.all()
+    if request.method == 'POST':
+        subject_id = request.form.get('m_subject')
+        subject_topic = request.form.get('m_topic')
+        subject_detail = request.form.get('m_about_topic')
+        subject_assignment = request.form.get('m_assignment')
+
+        if not subject_id or not subject_topic or not subject_detail:
+            flash('Field canot be empty')
+        else:
+            new_module = Module(subject_id=subject_id, topic=subject_topic, about_topic=subject_detail, assignment=subject_assignment)
+            db.session.add(new_module)
+            db.session.commit()
+
+        return redirect(url_for('teacher.view_module'))
+    return render_template('teacher/module/create_module.html', subjects=subjects, modules=modules)
+
+
+@teacher.route('/<int:id>/teacher/module/update', methods=['GET', 'POST'])
+@login_required
+def update_module(id):
+    modules = Module.query.filter_by(id=id).first()
+    subjects = Subject.query.all()
+    if request.method == 'POST':
+        subject_topic = request.form.get('m_topic')
+        subject_about_topic = request.form.get('m_about_topic')
+        subject_assignment = request.form.get('m_assignment')
+
+        if not subject_topic or not subject_about_topic or not subject_assignment:
+            flash('Field canot be empty')
+        else:
+            modules = Module.query.filter_by(id=id).first()
+            subjects = Subject.query.all()
+            modules.topic = subject_topic
+            modules.about_topic = subject_about_topic
+            modules.assignment = subject_assignment
+            db.session.commit()
+
+            return redirect(url_for('teacher.view_module'))
+    return render_template('teacher/module/update_module.html', subjects=subjects, module=Module.query.filter_by(id=id).first())
+
+@teacher.route('/<int:id>/teacher/module/delete', methods=['GET', 'POST'])
+@login_required
+def delete_module(id):
+    module = Module.query.filter_by(id=id).first()
+    db.session.delete(module)
+    db.session.commit()
+    return redirect(url_for('teacher.view_module'))
