@@ -1,0 +1,92 @@
+{% extends 'student/base.html' %}
+
+{% block title %}Dashboard student{% endblock title %}
+
+{% block nav_module_active %}active{% endblock nav_module_active %}
+
+{% block student_content %}
+<div class="container-fluid">
+    <!-- Content Row -->
+    <div class="row mb-5">
+        <div class="col-xl-12 col-md-12 mb-12">
+            <a class="btn btn-dark btn-icon-split mr-4" href="{{ url_for('admin.create_module') }}">
+                <span class="icon text-white-50"><i class="fa fa-plus" aria-hidden="true"></i></span>
+            </a>
+        </div>
+    </div>
+
+    {% for module in modules %}
+        <div class="card shadow mb-4">
+            <div class="card-header d-flex flex-row align-items-center justify-content-between py-3">
+                {% for subject in subjects %}
+                    {% if subject.subject_id == module.subject_id %}
+                        <h2 class="font-weight-bold text-dark my-auto">{{ subject.subject_name }}</h2>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="card-body">
+                <div class="row mb-5">
+                    <div class="col-12 mb-4">
+                        <div class="btn-group">
+                            {% for i in range(1, 14) %}
+                                <div class="d-flex flex-wrap mx-1 my-1">
+                                    <button class="btn btn-dark text-center" type="button" onclick="openModuleDetail(event, '{{ i }}')">
+                                        Topic {{ i }}
+                                        {% set index = i %}
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        </div> 
+                    </div>
+                    
+                    <div class="col-12 mb-4">
+                    
+                    {% for i in range(1, 14) %}
+                        <div style="display: none;" id="moduleDetail{{ i }}">
+                            <div class="card-body">
+                                <form class="user" method="post" enctype="multipart/form-data">
+                                    
+                                    {% for module in modules %}
+                                    {% if module.id == i %}
+                                    <div class="form-group">
+                                        <label>Topic</label>
+                                        <input class="form-control" type="text" name="m_topic" value="{{ module.topic }}" disabled>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>About</label>
+                                        <textarea class="form-control" name="m_about" style="height: 100px" disabled>{{ module.about_topic }}</textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Attachment </label>
+                                        <a href="uploads/<?php echo $files[$a]; ?>" download> Download </a>
+                                        <a class="btn btn-warning btn-icon-split mx-2" href="{{ url_for('admin.update_module', id=module.id) }}">
+                                            <span class="text">
+                                                <i class="fa fa-wrench" aria-hidden="true"></i>
+                                            </span>
+                                        </a>
+
+                                        <a class="btn btn-danger btn-icon-split mx-2" data-toggle="modal" data-target="#deleteUserModal{{ module.id }}">
+                                            <span class="icon text">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </span>
+                                        </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock student_content %}
